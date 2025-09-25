@@ -1,4 +1,5 @@
-import Message from "../models/messageSchema";
+// import Message from "../models/messageSchema";
+import Message from "../models/messageSchema.js"
 
 export const addMessage = async(req,res)=>{
     const {FirstName, LastName, email, phone, message} = req.body;
