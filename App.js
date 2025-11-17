@@ -1,7 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import session from 'express-session'
-import messageRouter from './routes/messageroutes.js'
+import superAdminRoutes from "./routes/superAdmin.routes.js";
+import enquiryRoutes from "./routes/enquiry.routes.js";
 
 const app = express()
 
@@ -21,7 +22,8 @@ app.use(session({
 }))
 
 app.use(express.json());
-app.use('/api/message', messageRouter);
+app.use("/api/superadmin", superAdminRoutes);
+app.use("/api/enquiry", enquiryRoutes);
 
 export default app;
 
