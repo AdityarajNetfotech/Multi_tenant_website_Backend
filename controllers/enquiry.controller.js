@@ -3,15 +3,17 @@ import Enquiry from "../models/enquiry.model.js";
 import nodemailer from "nodemailer";
 
 // ---- Nodemailer Transport ----
-const transporter = nodemailer.createTransport({
-  host: "gmail",
-  port: 465,  
-  secure: true,
-  auth: {
-    user: process.env.ADMIN_EMAIL,
-    pass: process.env.ADMIN_EMAIL_PASSWORD
-  }
-});
+const createTransporter = () => {
+  return nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+};
 // ---- Create Enquiry ----
 export const createEnquiry = async (req, res) => {
   try {
@@ -25,14 +27,14 @@ export const createEnquiry = async (req, res) => {
       phone
     });
 
-    console.log("Email:", process.env.ADMIN_EMAIL);
-console.log("Password:", process.env.ADMIN_EMAIL_PASSWORD ? "LOADED" : "NOT LOADED");
+    console.log("Email:", process.env.EMAIL_USER);
+console.log("Password:", process.env.EMAIL_PASS ? "LOADED" : "NOT LOADED");
 
 
     // ---- Send Email to Admin ----
     const mailOptions = {
-      from: process.env.ADMIN_EMAIL,
-      to: process.env.ADMIN_EMAIL, // admin's email
+      from: process.env.EMAIL_FROM,
+      to: process.env.EMAIL_USER, // admin's email
       subject: "New Enquiry Received",
       html: `
         <h3>You have a new enquiry!</h3>
@@ -43,7 +45,7 @@ console.log("Password:", process.env.ADMIN_EMAIL_PASSWORD ? "LOADED" : "NOT LOAD
       `
     };
 
-    await transporter.sendMail(mailOptions);
+    await createTransporter().sendMail(mailOptions);
 
     res.status(201).json({
       status: "success",
