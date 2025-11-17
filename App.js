@@ -3,6 +3,7 @@ import cors from 'cors'
 import session from 'express-session'
 import superAdminRoutes from "./routes/superAdmin.routes.js";
 import enquiryRoutes from "./routes/enquiry.routes.js";
+import companyRoutes from "./routes/company.routes.js"
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use(session({
 app.use(express.json());
 app.use("/api/superadmin", superAdminRoutes);
 app.use("/api/enquiry", enquiryRoutes);
+app.use("/api/company", companyRoutes);
 
 export default app;
 
