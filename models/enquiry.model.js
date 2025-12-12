@@ -9,7 +9,7 @@ const enquirySchema = new mongoose.Schema(
     },
     emailid: {
       type: String,
-      required: true,
+      required: true, 
       lowercase: true
     },
     message: {

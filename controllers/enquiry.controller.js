@@ -29,7 +29,7 @@ export const createEnquiry = async (req, res) => {
 
     console.log("Email:", process.env.EMAIL_USER);
 console.log("Password:", process.env.EMAIL_PASS ? "LOADED" : "NOT LOADED");
-
+ 
 
     // ---- Send Email to Admin ----
     const mailOptions = {
