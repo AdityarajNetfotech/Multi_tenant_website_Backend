@@ -13,7 +13,7 @@ const CompanySchema = new mongoose.Schema({
   address2: { type: String, default: "" },
   city: { type: String, required: true },
   state: { type: String, required: true },
-  logo: { type: String, default: "" },
+  logo: { type: String, default: "" }, 
 });
 
 export default mongoose.model("Company", CompanySchema);

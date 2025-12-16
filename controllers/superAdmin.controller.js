@@ -92,3 +92,28 @@ export const deleteSuperAdmin = async (req, res) => {
 };
 
 
+export const getallRegisteredAdmins = async (req, res) => {
+  try {
+    const admins = await SuperAdmin.find().select("-password");
+    res.status(200).json({ status: "success", count: admins.length, data: admins });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+};
+
+export const getAllTickets = async (req, res) => {
+  try {
+    // Logic to fetch all tickets from the database
+    const tickets = await Ticket.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      status: "success",
+      results: tickets.length,
+      data: tickets
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message
+    });
+  } 
+};

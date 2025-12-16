@@ -5,8 +5,11 @@ import {
   loginSuperAdmin,
   getSuperAdminProfile,
   deleteSuperAdmin,
-  updateSuperAdminProfile  
+  updateSuperAdminProfile, 
+  getallRegisteredAdmins
 } from "../controllers/superAdmin.controller.js";
+
+import { receiveTicket, getAllTickets, replyToTicket, receiveAdminReply } from "../controllers/ticketController.js";
 
 import {
   protect,
@@ -17,7 +20,7 @@ const router = express.Router();
 
 // Public Routes
 router.post("/register", registerSuperAdmin);
-router.post("/login", loginSuperAdmin);
+router.post("/login", loginSuperAdmin); 
 
 // Protected SuperAdmin Route
 router.get("/dashboard", protect, superAdminOnly, (req, res) => {
@@ -27,4 +30,11 @@ router.get("/dashboard", protect, superAdminOnly, (req, res) => {
 router.get("/profile", protect, superAdminOnly, getSuperAdminProfile);
 router.get("delete-superadmin", protect, superAdminOnly, deleteSuperAdmin);
 router.put("update-superadmin", protect, superAdminOnly, updateSuperAdminProfile);
+router.post("/receiveTickets", receiveTicket);
+router.get("/allTickets",  getAllTickets);
+router.post("/reply-to-ticket/:ticketId", replyToTicket);
+router.post("/reply-from-admin", receiveAdminReply);
+router.get("/getAllAdmins", getallRegisteredAdmins);
+
+
 export default router;

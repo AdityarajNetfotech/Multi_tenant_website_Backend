@@ -18,7 +18,7 @@ const superAdminSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: 6,
-      select: false
+      select: false 
     },
     role: {
       type: String,
@@ -32,7 +32,7 @@ const superAdminSchema = new mongoose.Schema(
 superAdminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
-  next();
+  next(); 
 });
 
 // Compare password

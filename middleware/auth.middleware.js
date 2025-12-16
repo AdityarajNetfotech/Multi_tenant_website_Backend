@@ -7,7 +7,7 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    if (req.headers.authorization?.startsWith("Bearer")) {
+    if (req.headers.authorization?.startsWith("Bearer")) { 
       token = req.headers.authorization.split(" ")[1];
     }
 
@@ -23,7 +23,7 @@ export const protect = async (req, res, next) => {
     req.user = currentAdmin;
 
     next();
-  } catch (err) {
+  } catch (err) { 
     res.status(401).json({ message: "Invalid or expired token" });
   }
 };
