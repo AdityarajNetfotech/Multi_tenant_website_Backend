@@ -2,7 +2,10 @@
 import express from "express";
 import {
   registerSuperAdmin,
-  loginSuperAdmin
+  loginSuperAdmin,
+  getSuperAdminProfile,
+  deleteSuperAdmin,
+  updateSuperAdminProfile  
 } from "../controllers/superAdmin.controller.js";
 
 import {
@@ -21,4 +24,7 @@ router.get("/dashboard", protect, superAdminOnly, (req, res) => {
   res.json({ message: "Welcome SuperAdmin Dashboard!" });
 });
 
+router.get("/profile", protect, superAdminOnly, getSuperAdminProfile);
+router.get("delete-superadmin", protect, superAdminOnly, deleteSuperAdmin);
+router.put("update-superadmin", protect, superAdminOnly, updateSuperAdminProfile);
 export default router;
