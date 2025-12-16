@@ -3,6 +3,9 @@ import express from "express";
 import {
   registerSuperAdmin,
   loginSuperAdmin,
+  getSuperAdminProfile,
+  deleteSuperAdmin,
+  updateSuperAdminProfile, 
   getallRegisteredAdmins
 } from "../controllers/superAdmin.controller.js";
 
@@ -24,6 +27,9 @@ router.get("/dashboard", protect, superAdminOnly, (req, res) => {
   res.json({ message: "Welcome SuperAdmin Dashboard!" });
 });
 
+router.get("/profile", protect, superAdminOnly, getSuperAdminProfile);
+router.get("delete-superadmin", protect, superAdminOnly, deleteSuperAdmin);
+router.put("update-superadmin", protect, superAdminOnly, updateSuperAdminProfile);
 router.post("/receiveTickets", receiveTicket);
 router.get("/allTickets",  getAllTickets);
 router.post("/reply-to-ticket/:ticketId", replyToTicket);
