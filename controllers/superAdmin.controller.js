@@ -56,7 +56,7 @@ export const getSuperAdminProfile = async (req, res) => {
     const admin = await SuperAdmin.findById(req.user.id);
     res.status(200).json({
       status: "success",
-      data: { id: admin._id, name: admin.name, email: admin.email },
+      data: admin,
     });
   } catch (err) {
     res.status(400).json({ status: "fail", message: err.message });
