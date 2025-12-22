@@ -6,7 +6,8 @@ import {
   getSuperAdminProfile,
   deleteSuperAdmin,
   updateSuperAdminProfile, 
-  getallRegisteredAdmins
+  getallRegisteredAdmins,
+  getCompanyForSync
 } from "../controllers/superAdmin.controller.js";
 
 import { receiveTicket, getAllTickets, replyToTicket, receiveAdminReply } from "../controllers/ticketController.js";
@@ -35,6 +36,10 @@ router.get("/allTickets",  getAllTickets);
 router.post("/reply-to-ticket/:ticketId", replyToTicket);
 router.post("/reply-from-admin", receiveAdminReply);
 router.get("/getAllAdmins", getallRegisteredAdmins);
+router.get(
+  "/companies/:companyId", // optional
+  getCompanyForSync
+);
 
 
 export default router;

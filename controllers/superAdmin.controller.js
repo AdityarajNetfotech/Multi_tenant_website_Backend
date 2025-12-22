@@ -1,6 +1,7 @@
 // controllers/superAdmin.controller.js
 import jwt from "jsonwebtoken";
 import SuperAdmin from "../models/superAdmin.model.js";
+import Company from "../models/company.model.js";
 
 const signToken = (id) => {
   return jwt.sign({ id, role: "superadmin" }, process.env.JWT_SECRET, {
@@ -116,4 +117,36 @@ export const getAllTickets = async (req, res) => {
       message: err.message
     });
   } 
+};
+
+
+// @desc    Get company by ID (for sync)
+// @route   GET /api/companies/:id
+// @access  Protected (SuperAdmin only or service token)
+// export const getCompanyForSync = asyncHandler(async (req, res, next) => {
+//   const company = await Company.findById(req.params.id);
+
+//   if (!company) {
+//     return next(new errorResponse("Company not found", 404));
+//   }
+
+//   res.status(200).json({
+//     success: true,
+//     data: company
+//   });
+// });
+
+
+export const getCompanyForSync = async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.status(404).json({ status: "fail", message: "Company not found" });
+    } 
+    res.status(200).json({ status: "success", data: company });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
 };
