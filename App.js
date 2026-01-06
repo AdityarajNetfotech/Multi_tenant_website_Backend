@@ -8,7 +8,7 @@ import companyRoutes from "./routes/company.routes.js"
 const app = express()
 
 app.use(cors({
-    origin: "*",
+   origin: ["https://final-frontend-ai-project.vercel.app","http://localhost:5173"],
     methods: ["GET","POST","PUT","DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type","Authorization"]
