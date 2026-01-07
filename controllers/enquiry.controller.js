@@ -2,42 +2,45 @@
 import Enquiry from "../models/enquiry.model.js";
 import nodemailer from "nodemailer";
 
-// ---- Nodemailer Transport ----
+// ---- Nodemailer Transport (Render Safe) ----
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false, // true for 465, false for other ports
+    host: process.env.EMAIL_HOST, // smtp.gmail.com
+    port: Number(process.env.EMAIL_PORT), // 587
+    secure: false, // MUST be false for 587
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      pass: process.env.EMAIL_PASS, // APP PASSWORD
     },
-    tls:{
-      rejectUnauthorized:false,
-    }
   });
 };
+
 // ---- Create Enquiry ----
 export const createEnquiry = async (req, res) => {
   try {
     const { companyName, emailid, message, phone } = req.body;
 
-    // Save to DB
+    // 1️⃣ Save enquiry to DB
     const newEnquiry = await Enquiry.create({
       companyName,
       emailid,
       message,
-      phone
+      phone,
     });
 
-    console.log("Email:", process.env.EMAIL_USER);
-console.log("Password:", process.env.EMAIL_PASS ? "LOADED" : "NOT LOADED");
- 
+    // 2️⃣ Respond immediately (VERY IMPORTANT)
+    res.status(201).json({
+      status: "success",
+      message: "Enquiry submitted successfully.",
+      data: newEnquiry,
+    });
 
-    // ---- Send Email to Admin ----
+    // 3️⃣ Send email in background (NON-BLOCKING)
+    const transporter = createTransporter();
+
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_USER, // admin's email
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // admin email
       subject: "New Enquiry Received",
       html: `
         <h3>You have a new enquiry!</h3>
@@ -45,20 +48,22 @@ console.log("Password:", process.env.EMAIL_PASS ? "LOADED" : "NOT LOADED");
         <p><strong>Email ID:</strong> ${emailid}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Message:</strong> ${message}</p>
-      `
+      `,
     };
 
-    await createTransporter().sendMail(mailOptions);
+    transporter
+      .sendMail(mailOptions)
+      .then(() => console.log("📧 Enquiry email sent"))
+      .catch((err) =>
+        console.error("❌ Enquiry email failed:", err.message)
+      );
 
-    res.status(201).json({
-      status: "success",
-      message: "Enquiry submitted and email sent to admin.",
-      data: newEnquiry
-    });
   } catch (err) {
+    console.error("❌ Enquiry controller error:", err.message);
+
     res.status(400).json({
       status: "fail",
-      message: err.message
+      message: err.message,
     });
   }
 };
